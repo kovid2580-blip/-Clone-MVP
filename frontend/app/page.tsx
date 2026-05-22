@@ -44,7 +44,10 @@ type Comment = {
 type AuthMode = "login" | "register";
 type SortMode = "latest" | "popular";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080/api";
+const API_URL = (
+  process.env.NEXT_PUBLIC_API_URL?.trim() ||
+  (process.env.NODE_ENV === "production" ? "https://clone-mvp.onrender.com/api" : "http://localhost:8080/api")
+).replace(/\/$/, "");
 
 async function apiRequest<T>(path: string, options: RequestInit = {}, token?: string | null): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, {
